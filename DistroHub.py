@@ -1,6 +1,6 @@
 import sys
 import subprocess
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QMessageBox, QGroupBox, QDialog, QTableWidget, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QComboBox, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox, QGroupBox, QDialog, QTableWidget, QTableWidgetItem, QHeaderView
 from PyQt5.QtCore import QThread, pyqtSignal
 
 class ListContainersWorker(QThread):
@@ -8,7 +8,7 @@ class ListContainersWorker(QThread):
 
     def run(self):
         while True:
-            command = "distrobox-list"
+            command = "distrobox-list --no-color"
             output = subprocess.getoutput(command)
             data = self.parse_output(output)
             self.data_updated.emit(data)
@@ -73,7 +73,6 @@ class DistroHub(QMainWindow):
         self.name_textbox = QLineEdit()
         self.name_textbox.setPlaceholderText("Enter Name")
 
-        self.distro_label = QLabel("Select Distro:")
         self.distro_dropdown = QComboBox()
         distro_options = list(self.distros.keys())  # Use the keys of the self.distros dictionary
         self.distro_dropdown.addItems(distro_options)
@@ -83,7 +82,6 @@ class DistroHub(QMainWindow):
         self.create_button.clicked.connect(self.create_container)
 
         layout.addWidget(self.name_textbox)
-        layout.addWidget(self.distro_label)
         layout.addWidget(self.distro_dropdown)
         layout.addWidget(self.create_button)
 
